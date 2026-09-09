@@ -1,0 +1,19 @@
+{
+  "name": "priotas",
+  "description": "Manage Priotas tasks, projects, inbox captures and reviews through your connected workspace.",
+  "author": {
+    "name": "Priotas"
+  },
+  "license": "MIT",
+  "homepage": "https://priotas.io",
+  "repository": "https://github.com/Rimmugygur/priotas-plugins",
+  "keywords": [
+    "priotas",
+    "tasks",
+    "projects",
+    "gtd"
+  ],
+  "version": "0.2.0",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

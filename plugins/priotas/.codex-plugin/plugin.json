@@ -1,0 +1,42 @@
+{
+  "name": "priotas",
+  "version": "0.2.0",
+  "description": "Manage Priotas tasks, projects, inbox captures and reviews through your connected workspace.",
+  "author": {
+    "name": "Priotas"
+  },
+  "license": "MIT",
+  "homepage": "https://priotas.io",
+  "repository": "https://github.com/Rimmugygur/priotas-plugins",
+  "keywords": [
+    "priotas",
+    "tasks",
+    "projects",
+    "gtd"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Priotas",
+    "shortDescription": "Plan your day and move your tasks forward.",
+    "longDescription": "Connect your Priotas workspace to capture ideas, review projects, plan next actions and complete tasks. Sign in with Priotas and choose the workspace and access you want to grant.",
+    "developerName": "Priotas",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://priotas.io",
+    "defaultPrompt": [
+      "Help me plan my day in Priotas.",
+      "Review my Priotas inbox with me.",
+      "What needs attention in my Priotas projects?"
+    ],
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png",
+    "logoDark": "./assets/logo-dark.png",
+    "privacyPolicyURL": "https://priotas.io/privacy",
+    "termsOfServiceURL": "https://priotas.io/terms",
+    "brandColor": "#2563eb"
+  }
+}

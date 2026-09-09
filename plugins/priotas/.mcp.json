@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "priotas": {
+      "type": "http",
+      "url": "https://api.priotas.io/mcp"
+    }
+  }
+}
