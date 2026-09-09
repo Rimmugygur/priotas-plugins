@@ -1,8 +1,9 @@
 # Priotas for AI assistants
 
-[Priotas](https://priotas.io) is a Getting Things Done app: capture everything,
-clarify it into next actions, projects, waiting-fors, reminders, someday items and
-notes, and work from filtered lists and a daily agenda, alone or in a team.
+[Priotas](https://priotas.io) is a productivity app inspired by the Getting Things
+Done methodology: capture everything, clarify it into next actions, projects,
+waiting-fors, reminders, someday items and notes, and work from filtered lists and
+a daily agenda, alone or in a team.
 
 This repository is the installable Priotas plugin for **Claude Code** and
 **Codex**, and the user guide for connecting any MCP-capable assistant (Claude,
@@ -170,6 +171,8 @@ reused refresh token is treated as stolen and its whole family is revoked.
 
 Questions and problems: [open an issue](https://github.com/Rimmugygur/priotas-plugins/issues)
 or write to support@priotas.io.
+
+*Getting Things Done and GTD are registered trademarks of the David Allen Company. Priotas is an independent product, not affiliated with or endorsed by it.*
 
 ---
 

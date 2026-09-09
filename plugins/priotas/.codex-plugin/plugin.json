@@ -12,7 +12,7 @@
     "priotas",
     "tasks",
     "projects",
-    "gtd"
+    "next actions"
   ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
