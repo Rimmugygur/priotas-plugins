@@ -17,155 +17,52 @@ the server address and a short skill; nothing runs on your machine.
 - What it can never do: delete anything, reset or clear a workspace, change members
   or project owners.
 
-## Connecting
+## User guide
 
-Account → **Connected assistants** in Priotas shows these steps with your exact
-server address and copy buttons.
+Everything a person needs to know, from connecting each client to what an
+assistant can and cannot do, changes and revert, sessions, formatting and staying
+signed in, lives in the Priotas docs:
 
-### Claude Code
+- [Assistants](https://priotas.io/docs/assistants): connecting Claude, Claude Code,
+  Codex and ChatGPT, workspaces and scopes, the change log and revert.
+- [The method behind Priotas](https://priotas.io/getting-things-done): the
+  Getting Things Done methodology in plain words, with links into the docs.
+- [Docs home](https://priotas.io/docs/getting-started).
 
-Inside Claude Code:
+Short version for Claude Code:
 
 ```text
 /plugin marketplace add Rimmugygur/priotas-plugins
 /plugin install priotas@priotas
 ```
 
-Choose the **user** scope so the plugin is available in every project. Then run
-`/mcp`, select `priotas` and choose **Authenticate**. Installation alone does not
-sign you in.
+Then `/mcp`, select `priotas`, **Authenticate**. Use the plugin or a manual
+`claude mcp add`, not both, or Claude sees every tool twice.
 
-Without the plugin, one command registers the server for every project:
+### Codex desktop
 
-```bash
-claude mcp add --scope user --transport http priotas https://api.priotas.io/mcp
-```
-
-Use the plugin or the manual registration, not both, or Claude sees every tool
-twice. The server's own instructions tell Claude that tasks and projects live in
-Priotas, so no per-project prompt text is needed.
-
-### Codex
-
-Until the plugin is listed in the Codex plugin directory, connect the server
-directly. In the desktop app: **Settings → MCP servers → Add server**, name it
-`priotas`, choose **Streamable HTTP**, paste the server address, save, restart,
-then choose **Authenticate** for Priotas. From the CLI:
+With the [Codex CLI](https://developers.openai.com/codex/cli/) installed, add this
+marketplace from a terminal on the machine running Codex:
 
 ```bash
-codex mcp add priotas --url https://api.priotas.io/mcp
-codex mcp login priotas
+codex plugin marketplace add Rimmugygur/priotas-plugins
 ```
 
-Run these where Codex runs. Windows and WSL keep separate configuration and
-sign-in storage. Codex desktop and the VS Code extension read the same
-configuration, so one sign-in covers them.
+Restart Codex desktop, open **Plugins**, find **Priotas** in the added marketplace
+and install it. Alternatively, run `codex plugin add priotas@priotas`.
+Complete the connection prompt (or choose **Authenticate** for the plugin's MCP
+connection), sign into Priotas, choose your workspace and press **Allow**.
+Start a new task and ask **“Summarize my Priotas workspace.”**
 
-### Claude (claude.ai, Claude Desktop)
+Repeat setup on each machine. Windows and WSL can have separate configuration;
+run the command in the environment hosting Codex. If the command is unavailable,
+install or update the CLI. Disable any previous manual Priotas MCP connection or
+other Priotas plugin installation before using this copy to avoid duplicate tools.
 
-Settings → Connectors → **Add custom connector**. Name it Priotas, paste the
-server address, leave the client secret empty, save, then **Connect**. A connector
-added on the web is available in Claude Desktop, mobile and Cowork too.
-
-### ChatGPT
-
-Turn on developer mode once (Settings → Connectors → Advanced), then Settings →
-Connectors → **Create**. Same server address, OAuth authentication; ChatGPT
-registers itself and walks you through the same consent screen.
-
-## Choosing the workspace
-
-A connection is *you in one workspace*. The consent screen lists every workspace
-you belong to.
-
-- **Personal:** the assistant sees what you see. Inbox, next actions (including
-  team tasks assigned to you), projects (yours plus the team projects you pinned),
-  waiting-fors, reminders, someday list and notes.
-- **Team:** the assistant sees that team's tasks, projects and people. It can
-  create tasks for you or leave them unassigned, update and finish tasks assigned
-  to you, and comment. It cannot assign work to anyone else.
-
-Connect twice for two workspaces. Each connection is listed and revoked on its own
-under Account → Connected assistants. Leaving a team, or being removed from one,
-revokes every connection you held there.
-
-## What the assistant can do
-
-Every tool is named `priotas_<verb>`, so a fresh chat can tell whose tools they
-are. Reads, on every connection: workspace summary, next actions (personal) or
-tasks (team), projects, inbox, waiting-fors, reminders / someday / notes, people
-(team), one item in full, search, agenda. Writes, on connections granted the
-*write* scope: capture, clarify an inbox item, create / update / finish a task,
-create / update a project, create / update a waiting-for, reminder, someday item
-or note, add a comment, toggle a checklist step, change an item's type. In a
-team, writes reach only tasks assigned to you, and a project's owner cannot be
-changed.
-
-Resources (`priotas://today`, `priotas://inbox`, `priotas://project/{id}`) and
-prompts (`weekly_review`, `clarify_inbox`, `plan_my_day`, `draft_followups`,
-`project_brief`, and `standup` in teams) appear as slash commands in assistants
-that support them.
-
-## Seeing and undoing what an assistant changed
-
-Every write is recorded with the fields as they were before and after.
-**Assistant changes** (in the sidebar while there is anything from the last seven
-days, always from Account → Assistants) lists them newest first as one-line
-diffs; in a team each row names the person and the assistant. **Revert** puts the
-fields back: a created item is deleted, a finished task returns to active with its
-summary removed, a clarified capture goes back to the inbox, a converted item goes
-back to its old kind under the same id. If a person edited the item after the
-assistant, Revert asks first. A session's changes can be reverted together. The
-log is kept for ninety days.
-
-Finishing a task is final on the assistant's side: it marks the task done and
-appends its summary to the notes. The dashboard's **Finished by assistants** card
-shows the last week's finishes with Revert one click away. Comments and team
-notifications say *via <assistant>* and *by <person> via <assistant>*.
-
-## Following an assistant's work
-
-An assistant working on a task or project can open a **session** there. The
-item's page then shows an *Assistant* block: its plan, what it did and, when it
-needs a decision, a question you answer right there. Until you answer, the task
-shows *Needs you* and the dashboard lists it under **Needs your input**. Anyone
-who can see the item can follow the session; only the person the assistant works
-for can answer.
-
-## Formatting
-
-Assistants read and write **Markdown** everywhere: notes, task notes, project
-descriptions and the notes on waiting-fors, reminders and someday items. Notes
-store Markdown as-is; the other kinds convert to the editor's rich text on the way
-in and back on the way out, so round trips do not drift. Attachments cannot be
-uploaded or downloaded by an assistant. Inline attachment chips appear as
-`![filename](attachment://id)` and are re-appended if an edit drops them, so a
-file reference is never lost. Every list carries created and updated timestamps
-and accepts `createdSince` / `updatedSince`.
-
-## Changing an item's type
-
-There is no move back to the inbox; the inbox is a one-way funnel. An item of the
-wrong kind is **converted**: Change type in the item menu, `priotas_convert_item`
-for assistants. A conversion keeps the item's id, attachments, links, tags and,
-between tasks and projects, comments. Fields the new kind cannot hold are
-**losses**: steps, dependencies, an assignee, a due date on a someday item, and so
-on. A person sees the list and may go ahead. An assistant may only make lossless
-conversions and is told what would be lost so it can ask you. A project converts
-or is deleted only when it is empty (no tasks, waiting items or linked notes, done
-ones included). An item with an open assistant session cannot be converted;
-deleting it cancels the session.
-
-## Staying signed in
-
-You authenticate once per client per machine. Every Claude Code (or Codex)
-install is the same OAuth client, so a new consent adds a token set and leaves the
-others alive, unless it grants narrower scopes, in which case the wider tokens are
-revoked. Access tokens last a day and refresh silently; every request still checks
-the token live, so Disconnect cuts access at once. A refresh token lasts thirty
-days from its last use, with a one-minute grace after rotation so two sessions
-refreshing at the same moment do not log each other out. After that minute a
-reused refresh token is treated as stolen and its whole family is revoked.
+This installs the tools **and** the Priotas workflow skill from our GitHub
+marketplace; it does not require a public OpenAI directory listing. For manual
+MCP setup or self-hosted deployments, see the
+[Codex setup guide](https://priotas.io/docs/assistants#codex).
 
 ## Support
 
@@ -232,8 +129,8 @@ for a test account, and the test cases below.
 
 Run against the reviewer account's fixtures: a personal workspace with the project
 "Launch newsletter" (tasks "Draft issue 1", "Pick a sending tool" due 2026-01-15,
-"Write welcome mail"), the next action "Compare hosting plans" with two checklist
-steps, the reminder "Renew domain", the waiting-for "Logo from Anna" and the inbox
+"Write welcome mail"), the next action "Compare hosting plans" with the context
+@computer and a due date, the reminder "Renew domain", the waiting-for "Logo from Anna" and the inbox
 captures "Ask Jon about pricing" and "Look into podcast idea"; and the team
 workspace "Directory review" with "Prepare directory demo" (assigned to the
 reviewer, two steps) and "Review pricing page" (assigned to someone else). Both
@@ -263,9 +160,10 @@ Negative:
 7. Team. "Mark Review pricing page as done." The assistant declines because the
    task is assigned to someone else, or calls `priotas_finish_task` and relays the
    server's refusal. The task stays active.
-8. Personal. "Turn Compare hosting plans into a note." `priotas_convert_item` is
-   refused as lossy (the steps would be lost); the assistant reports the loss and
-   points to Change type in the app. The task is unchanged.
+8. Personal. "Turn Compare hosting plans into a someday idea." `priotas_convert_item`
+   is refused as lossy (a someday item holds neither the context nor the due date);
+   the assistant reports the losses and points to Change type in the app. The
+   task is unchanged.
 
 ## Self-hosted Priotas
 
