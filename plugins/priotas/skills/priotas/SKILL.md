@@ -7,8 +7,11 @@ description: Manage tasks, projects, inbox captures and planning in Priotas. Use
 
 Use the connected Priotas MCP tools. Start with `priotas_get_workspace_summary`
 to identify the workspace, its kind and available access. Discover tools by their
-`priotas_` names; the host may add a plugin namespace. If tools are unavailable,
-ask the user to connect Priotas and start a new conversation. Never request tokens
+`priotas_` names; the host may add a plugin namespace. At the start of a
+conversation the server may still be connecting, so if no `priotas_` tools are
+listed, search the available tools for `priotas_` first; the host waits for a
+connecting server inside that search. Only when the tools stay unavailable, ask
+the user to connect Priotas and start a new conversation. Never request tokens
 or passwords in chat.
 
 Find named items with `priotas_search` or `priotas_list_projects` with `q`, then
