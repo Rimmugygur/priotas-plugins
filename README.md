@@ -126,9 +126,9 @@ for a test account, and the test cases below.
 ### Submission test cases
 
 Run against the reviewer account's fixtures: a personal workspace with the project
-"Launch newsletter" (tasks "Draft issue 1", "Pick a sending tool" due 2026-01-15,
+"Launch newsletter" (tasks "Draft issue 1", "Pick a sending tool" deadline 2026-01-15,
 "Write welcome mail"), the next action "Compare hosting plans" with the context
-@computer and a due date, the reminder "Renew domain", the waiting-for "Logo from Anna" and the inbox
+@computer and a deadline, the reminder "Renew domain", the waiting-for "Logo from Anna" and the inbox
 captures "Ask Jon about pricing" and "Look into podcast idea"; and the team
 workspace "Directory review" with "Prepare directory demo" (assigned to the
 reviewer, two steps) and "Review pricing page" (assigned to someone else). Both
@@ -159,7 +159,7 @@ Negative:
    task is assigned to someone else, or calls `priotas_finish_task` and relays the
    server's refusal. The task stays active.
 8. Personal. "Turn Compare hosting plans into a someday idea." `priotas_convert_item`
-   is refused as lossy (a someday item holds neither the context nor the due date);
+   is refused as lossy (a someday item holds neither the context nor the deadline);
    the assistant reports the losses and points to Change type in the app. The
    task is unchanged.
 
