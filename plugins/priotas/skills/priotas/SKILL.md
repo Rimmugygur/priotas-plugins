@@ -29,6 +29,14 @@ personal inbox items with `priotas_clarify_inbox_item`. Planning and review requ
 can be answered with reads; they do not by themselves authorize changing dates,
 assignments or statuses.
 
+Tasks and reminders can repeat. Set a rule with `repeat` on `priotas_create_task`,
+`priotas_update_task` and, for reminders, `priotas_create_item` and
+`priotas_update_item` (a reminder rule carries `tz`, the person's zone);
+`stopRepeating` ends it. Only send the rule's shape (unit, every, weekdays,
+monthDay or ordinal and weekday, basis, until); the server owns the anchor and
+the occurrence. Finishing a repeating task creates the next instance, which the
+finish result names; reads carry `repeat`, `seriesId` and `nextOccurrence`.
+
 Complete requested work with `priotas_finish_task` and a concrete summary of the
 result. `priotas_update_task` cannot set completion status. Write Markdown in
 notes and descriptions; preserve attachment references when editing bodies.
