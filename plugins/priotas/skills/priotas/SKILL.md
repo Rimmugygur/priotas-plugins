@@ -24,8 +24,10 @@ Personal lists include team tasks assigned to the user. Preserve each returned
 personal workspaces also have inbox, next actions, waiting-fors and Someday (tasks and projects shelved for later).
 The tool inventory depends on workspace kind and granted scopes.
 
-For an unstructured idea the user wants saved, use `priotas_capture`. Clarify
-personal inbox items with `priotas_clarify_inbox_item`. Planning and review requests
+For an unstructured idea the user wants saved, use `priotas_capture`. A capture
+is a task in Inbox; clarifying it with `priotas_clarify_inbox_item` moves it into
+the flow (or converts it in place), so what it became keeps the capture's id.
+Never move work back to the inbox: that is the person's decision. Planning and review requests
 can be answered with reads; they do not by themselves authorize changing dates,
 assignments or statuses.
 
