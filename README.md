@@ -2,7 +2,7 @@
 
 [Priotas](https://priotas.io) is a to-do app with the decisions already made:
 capture everything into one inbox, clarify it into next actions, projects,
-waiting-fors, reminders, someday items and notes, and work from filtered lists and
+waiting-fors, reminders, what is in Someday and notes, and work from filtered lists and
 a daily agenda, alone or in a team.
 
 This repository is the installable Priotas plugin for **Claude Code** and
@@ -158,10 +158,11 @@ Negative:
 7. Team. "Mark Review pricing page as done." The assistant declines because the
    task is assigned to someone else, or calls `priotas_finish_task` and relays the
    server's refusal. The task stays active.
-8. Personal. "Turn Compare hosting plans into a someday idea." `priotas_convert_item`
-   is refused as lossy (a someday item holds neither the context nor the deadline);
-   the assistant reports the losses and points to Change type in the app. The
-   task is unchanged.
+8. Personal. "Move Compare hosting plans to Someday." `priotas_convert_item`
+   (to: someday) is refused: moving work to Someday is the person's decision,
+   and the refusal says so; the assistant points to the task in the app. The
+   task is unchanged. (The other way, making something in Someday active with
+   to: task, is allowed and loses nothing.)
 
 ## Self-hosted Priotas
 

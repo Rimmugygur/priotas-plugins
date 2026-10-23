@@ -21,7 +21,7 @@ source such as GitHub; this skill does not redirect unrelated work into Priotas.
 
 Personal lists include team tasks assigned to the user. Preserve each returned
 `workspaceId` when acting on those rows. Team workspaces use tasks and projects;
-personal workspaces also have inbox, next actions, waiting-fors and someday items.
+personal workspaces also have inbox, next actions, waiting-fors and Someday (tasks and projects shelved for later).
 The tool inventory depends on workspace kind and granted scopes.
 
 For an unstructured idea the user wants saved, use `priotas_capture`. Clarify
