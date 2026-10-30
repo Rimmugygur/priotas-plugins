@@ -19,6 +19,17 @@ read details with `priotas_get_item`. Use returned IDs, not guessed identifiers.
 A project's details include its tasks. Respect an explicitly named alternative
 source such as GitHub; this skill does not redirect unrelated work into Priotas.
 
+Areas sit above projects (Home, Work, a client) and have no status or dates.
+`priotas_list_areas` lists them and `priotas_search` finds one by name. For
+"what's open in Work", ask the task list for that `areaId`
+(`priotas_list_next_actions`, or `priotas_list_tasks` in a team), not one
+`priotas_get_item` per project; add `projectId: "none"` for only the tasks filed
+directly on the area. Next actions hide blocked tasks, so ask again with
+`blocked: true` when the user wants the whole open workload. Pass the area's
+`workspaceId` for a team area; from the personal connection that list is the
+user's own tasks there. When the user
+names an area for new work, file it there with `areaId`. Never delete an area.
+
 Personal lists include team tasks assigned to the user. Preserve each returned
 `workspaceId` when acting on those rows. Team workspaces use tasks and projects;
 personal workspaces also have inbox, next actions, waiting-fors and Someday (tasks and projects shelved for later).
