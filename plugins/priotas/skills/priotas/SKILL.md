@@ -30,6 +30,10 @@ directly on the area. Next actions hide blocked tasks, so ask again with
 user's own tasks there. When the user
 names an area for new work, file it there with `areaId`. Never delete an area.
 
+A task and a project each carry one label (`labels` is a list of at most
+one plain word from the project's vocabulary); sending a second is refused,
+so to relabel, send the new one alone.
+
 Personal lists include team tasks assigned to the user. Preserve each returned
 `workspaceId` when acting on those rows. Team workspaces use tasks and projects;
 personal workspaces also have inbox, next actions, waiting-fors and Someday (tasks and projects shelved for later).
