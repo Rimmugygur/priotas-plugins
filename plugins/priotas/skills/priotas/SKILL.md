@@ -26,8 +26,8 @@ Areas sit above projects (Home, Work, a client) and have no status or dates.
 `priotas_get_item` per project; add `projectId: "none"` for only the tasks filed
 directly on the area. Next actions hide blocked tasks, so ask again with
 `blocked: true` when the user wants the whole open workload. Pass the area's
-`workspaceId` for a team area; from the personal connection that list is the
-user's own tasks there. When the user
+`workspaceId` for a team area; from the personal connection next actions are the
+user's own tasks there and `priotas_list_tasks` is everyone's. When the user
 names an area for new work, file it there with `areaId`. Never delete an area.
 
 A task and a project each carry one label (`labels` is a list of at most
@@ -35,7 +35,15 @@ one plain word from the project's vocabulary); sending a second is refused,
 so to relabel, send the new one alone.
 
 Personal lists include team tasks assigned to the user. Preserve each returned
-`workspaceId` when acting on those rows. Team workspaces use tasks and projects;
+`workspaceId` when acting on those rows. On a personal connection
+`priotas_get_workspace_summary` also lists the user's team workspaces: pass a
+team's `workspaceId` to `priotas_list_tasks` for everyone's tasks there and to
+`priotas_list_people` for its members, and to `priotas_create_project`,
+`priotas_create_area` or `priotas_create_task` to create there (the user owns a
+project created this way). You have the access the user has there: you can edit
+and finish any task they can reach, and assign one with `assigneeId` (a `userId`
+from `priotas_list_people`, `""` to unassign). Assigning tells that person, so
+do it when asked. Changing a project's owner stays the person's decision. Team workspaces use tasks and projects;
 personal workspaces also have inbox, next actions, waiting-fors and Someday (tasks and projects shelved for later).
 The tool inventory depends on workspace kind and granted scopes.
 

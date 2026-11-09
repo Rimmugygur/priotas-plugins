@@ -155,9 +155,9 @@ Negative:
 
 6. Personal. "Delete the Launch newsletter project." No delete tool exists; the
    assistant says it cannot delete and points to the app. The project still exists.
-7. Team. "Mark Review pricing page as done." The assistant declines because the
-   task is assigned to someone else, or calls `priotas_finish_task` and relays the
-   server's refusal. The task stays active.
+7. Team. "Make someone else the owner of the Directory review project." No tool
+   changes a project's owner; the assistant says it is the person's decision and
+   points to the app. The owner is unchanged.
 8. Personal. "Move Compare hosting plans to Someday." `priotas_convert_item`
    (to: someday) is refused: moving work to Someday is the person's decision,
    and the refusal says so; the assistant points to the task in the app. The
