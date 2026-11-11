@@ -62,6 +62,29 @@ this assistant isn't allowed to work in a team, do not retry it and do not look
 for another way in: tell the user they can allow that team in Priotas under
 Account, Connected assistants, and carry on with what does not need it.
 
+A note is linked to the items it is about, where an item is `{kind, id}` and
+`kind` is `task`, `project`, `waiting`, `reminder`, `note` or `area`. There are
+two ways, and they can hold the same item:
+
+- Attach it. `links` on `priotas_create_item` (kind `note`), and `addLinks` and
+  `removeLinks` on `priotas_update_item`, each a list of `{kind, id}`. Nothing
+  is written in the note's text, and the links the note already has stay,
+  the person's included. This is what "put this note on the Launch project" or
+  "file it under the Home area" asks for.
+- Mention it. `[[kind:id|Title]]` in `bodyMd` shows as a link in the text and
+  links the note too. Use it when the sentence itself refers to the item. These
+  links follow the text: take the wiki link out and that link goes. A link
+  inside a code block or inline code is only text.
+
+Every link in a result carries its `source`: `manual` (attached) or `body` (from
+the text). `removeLinks` takes off an attached link only. If the text names the
+item too, the note stays linked and the result says "Still linked from the
+note's text": to unlink it fully, edit the body, and say so to the user rather
+than calling `removeLinks` again. To find the notes on an item, call
+`priotas_list_items` with kind `note`, `linkedKind` and `linkedId`. Notes and
+the items they link live in the personal workspace: a team item's id is not
+found.
+
 Team workspaces use tasks and projects;
 personal workspaces also have inbox, next actions, waiting-fors and Someday (tasks and projects shelved for later).
 The tool inventory depends on workspace kind and granted scopes.

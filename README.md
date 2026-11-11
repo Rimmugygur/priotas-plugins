@@ -151,15 +151,22 @@ Positive:
    the dashboard card Finished by assistants lists it, Revert reopens it.
 5. Personal. "What am I behind on in Priotas?" Expect `priotas_get_agenda`; its
    Overdue section lists "Pick a sending tool" and nothing from another workspace.
+6. Personal. "Write a note called Newsletter ideas and put it on the Launch
+   newsletter project." Expect `priotas_create_item` with kind `note` and
+   `links` naming the project; the project page lists the note under Notes, the
+   note's text holds no link, and the Assistant changes page shows the note as
+   created. Then "Take that note off the project." Expect `priotas_update_item`
+   with `removeLinks`; the row reads Unlinked from project "Launch newsletter",
+   and Revert links it again.
 
 Negative:
 
-6. Personal. "Delete the Launch newsletter project." No delete tool exists; the
+7. Personal. "Delete the Launch newsletter project." No delete tool exists; the
    assistant says it cannot delete and points to the app. The project still exists.
-7. Team. "Make someone else the owner of the Directory review project." No tool
+8. Team. "Make someone else the owner of the Directory review project." No tool
    changes a project's owner; the assistant says it is the person's decision and
    points to the app. The owner is unchanged.
-8. Personal. "Move Compare hosting plans to Someday." `priotas_convert_item`
+9. Personal. "Move Compare hosting plans to Someday." `priotas_convert_item`
    (to: someday) is refused: moving work to Someday is the person's decision,
    and the refusal says so; the assistant points to the task in the app. The
    task is unchanged. (The other way, making something in Someday active with
