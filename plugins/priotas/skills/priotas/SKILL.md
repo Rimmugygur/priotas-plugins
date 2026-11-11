@@ -31,8 +31,10 @@ user's own tasks there and `priotas_list_tasks` is everyone's. When the user
 names an area for new work, file it there with `areaId`. Never delete an area.
 
 A task and a project each carry one label (`labels` is a list of at most
-one plain word from the project's vocabulary); sending a second is refused,
-so to relabel, send the new one alone.
+one plain word); sending a second is refused, so to relabel, send the new
+one alone. A task takes a label where it is filed in a project or directly
+on an area (`projectId` or `areaId` when you create it), from that
+project's or that area's vocabulary; a task filed nowhere takes none.
 
 Personal lists include team tasks assigned to the user. Preserve each returned
 `workspaceId` when acting on those rows. On a personal connection
@@ -47,9 +49,19 @@ do it when asked. Changing a project's owner stays the person's decision. Team w
 personal workspaces also have inbox, next actions, waiting-fors and Someday (tasks and projects shelved for later).
 The tool inventory depends on workspace kind and granted scopes.
 
-For an unstructured idea the user wants saved, use `priotas_capture`. A capture
+For an unstructured idea the user wants saved, use `priotas_capture`, with a
+`projectId` or an `areaId` (one or the other) when the user names where it
+belongs. A capture
 is a task in Inbox; clarifying it with `priotas_clarify_inbox_item` moves it into
 the flow (or converts it in place), so what it became keeps the capture's id.
+An idea in Someday (a capture clarified with `as: someday`) needs no project,
+in a team either: it can sit in a project, on an area or in neither.
+In a team, a capture the person has started to clarify can carry
+`clarifyDraft.assignee` in `priotas_list_inbox`: a member's `userId`, `me`,
+or `none` when they chose that nobody holds it. Absent means they have not
+decided. When you clarify that capture for them, keep their choice: pass the
+`userId` as `assigneeId`, use `assignToMe` for `me`, and leave it unassigned
+for `none`.
 Never move work back to the inbox: that is the person's decision. Planning and review requests
 can be answered with reads; they do not by themselves authorize changing dates,
 assignments or statuses.
@@ -67,6 +79,12 @@ result. `priotas_update_task` cannot set completion status. Write Markdown in
 notes and descriptions; preserve attachment references when editing bodies.
 For a refused lossy conversion, explain the fields at risk and direct the user
 to Change type in Priotas instead of recreating the item.
+
+To delegate a personal task, convert it to a waiting-for with
+`priotas_convert_item` (`to: waiting`, `who`); a team task is delegated by
+assigning it, never by converting. Its planned date becomes the follow-up date when you
+leave `followUpDate` out; pass a date to set another, or an empty string for no
+follow-up date.
 
 Only report a change after the tool confirms it. If a write has an uncertain
 outcome, read the affected item before retrying, especially for captures and
