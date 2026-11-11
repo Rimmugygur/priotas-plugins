@@ -38,14 +38,31 @@ project's or that area's vocabulary; a task filed nowhere takes none.
 
 Personal lists include team tasks assigned to the user. Preserve each returned
 `workspaceId` when acting on those rows. On a personal connection
-`priotas_get_workspace_summary` also lists the user's team workspaces: pass a
+`priotas_get_workspace_summary` also lists the team workspaces the user allowed
+for this assistant: pass a
 team's `workspaceId` to `priotas_list_tasks` for everyone's tasks there and to
 `priotas_list_people` for its members, and to `priotas_create_project`,
 `priotas_create_area` or `priotas_create_task` to create there (the user owns a
 project created this way). You have the access the user has there: you can edit
 and finish any task they can reach, and assign one with `assigneeId` (a `userId`
 from `priotas_list_people`, `""` to unassign). Assigning tells that person, so
-do it when asked. Changing a project's owner stays the person's decision. Team workspaces use tasks and projects;
+do it when asked. Changing a project's owner stays the person's decision.
+
+The user chooses which teams an assistant on a personal connection works in.
+The summary says how many teams are not allowed. In a team that is not allowed
+you still read and update the user's own rows there, the ones the merged lists
+show (tasks assigned to them, projects they own or pinned): get, update, finish
+and comment work with the row's `workspaceId`. Everything else there is refused
+(everyone's tasks, the people, creating anything, another person's task), and
+on the user's own rows three changes are refused too: a change of assignee, a
+move to another project or area, and a change of blockers (`blockedBy`,
+`blocks`). A call that asks for one of those with other fields is refused
+whole, so send the other fields on their own. When a call says
+this assistant isn't allowed to work in a team, do not retry it and do not look
+for another way in: tell the user they can allow that team in Priotas under
+Account, Connected assistants, and carry on with what does not need it.
+
+Team workspaces use tasks and projects;
 personal workspaces also have inbox, next actions, waiting-fors and Someday (tasks and projects shelved for later).
 The tool inventory depends on workspace kind and granted scopes.
 

@@ -12,8 +12,9 @@ workspace permissions and records every assistant change. The plugin only carrie
 the server address and a short skill; nothing runs on your machine.
 
 - Server address: `https://api.priotas.io/mcp`
-- Sign-in: OAuth. The assistant sends you to Priotas, you pick a workspace and
-  press **Allow**. No API keys.
+- Sign-in: OAuth. The assistant sends you to Priotas, you pick a workspace
+  (and, for your personal one, the teams it may work in) and press **Allow**.
+  No API keys.
 - What it can never do: delete anything, reset or clear a workspace, change members
   or project owners.
 
