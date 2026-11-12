@@ -15,8 +15,9 @@ the server address and a short skill; nothing runs on your machine.
 - Sign-in: OAuth. The assistant sends you to Priotas, you pick a workspace
   (and, for your personal one, the teams it may work in) and press **Allow**.
   No API keys.
-- What it can never do: delete anything, reset or clear a workspace, change members
-  or project owners.
+- What it can never do: delete forever or empty the trash, reset or clear a
+  workspace, change members or project owners. What it deletes goes to the trash,
+  where you restore it.
 
 ## User guide
 
@@ -129,17 +130,18 @@ for a test account, and the test cases below.
 Run against the reviewer account's fixtures: a personal workspace with the project
 "Launch newsletter" (tasks "Draft issue 1", "Pick a sending tool" deadline 2026-01-15,
 "Write welcome mail"), the next action "Compare hosting plans" with the context
-@computer and a deadline, the reminder "Renew domain", the waiting-for "Logo from Anna" and the inbox
+@computer and a deadline, the empty project "Old ideas", the next action "Draft agenda"
+with the step "Collect topics", the reminder "Renew domain", the waiting-for "Logo from Anna" and the inbox
 captures "Ask Jon about pricing" and "Look into podcast idea"; and the team
 workspace "Directory review" with "Prepare directory demo" (assigned to the
 reviewer, two steps) and "Review pricing page" (assigned to someone else). Both
 connections carry the *write* scope. Reset after a run: revert every row on the
-Assistant changes page and delete the captures the run created.
+Assistant changes page, delete the captures the run created and empty the trash.
 
 Positive:
 
 1. Personal. "Summarize my Priotas workspace." Expect `priotas_get_workspace_summary`
-   and a reply naming the personal workspace with 4 next actions, 1 project and
+   and a reply naming the personal workspace with 5 next actions, 2 projects and
    2 inbox items.
 2. Personal. "What is left on the Launch newsletter project?" Expect
    `priotas_search` or `priotas_list_projects`, then `priotas_get_item`; the
@@ -158,19 +160,38 @@ Positive:
    created. Then "Take that note off the project." Expect `priotas_update_item`
    with `removeLinks`; the row reads Unlinked from project "Launch newsletter",
    and Revert links it again.
+7. Personal. "Move Compare hosting plans to Someday." Expect
+   `priotas_update_task` with `status: someday` (or `priotas_convert_item` with
+   to: someday); the task leaves Next actions and shows on the Someday page with
+   its context and deadline, the Assistant changes page shows the status going
+   from active to someday, and Revert puts it back in Next actions.
+8. Team, after case 4. "Reopen Prepare directory demo, it needs another
+   rehearsal." Expect `priotas_reopen_task` with the reason; the task is open
+   again with the reason as a comment written via the assistant, the Assistant
+   changes page shows a comment row and a Reopened row, and Revert on the
+   Reopened row finishes the task again with the summary from case 4 still on it.
+9. Personal. "Delete the Old ideas project and the task Draft agenda." Expect
+   `priotas_delete_item` twice; both are on the Trash page with the assistant's
+   name next to the user's, the task's row saying 1 step went with it, and the
+   reply names the step. The Assistant changes page shows two Deleted rows, and
+   Revert on the task's row brings it back with its step.
+10. Personal, after reverting case 9. "Turn Draft agenda into a waiting-for on
+   Anna." `priotas_convert_item` is refused first: the task has a step, which a
+   waiting-for cannot hold. The assistant says the step "Collect topics" would
+   be dropped and asks. After "Yes, go ahead" expect `priotas_convert_item`
+   with `acknowledgeLoss: true`; the item is on the Waiting for list under the
+   same id, the Assistant changes page shows a Converted row, and Revert brings
+   back the next action with its step.
 
 Negative:
 
-7. Personal. "Delete the Launch newsletter project." No delete tool exists; the
-   assistant says it cannot delete and points to the app. The project still exists.
-8. Team. "Make someone else the owner of the Directory review project." No tool
+11. Personal. "Delete the Launch newsletter project." `priotas_delete_item` is
+   refused: the project still holds tasks. The assistant says a project must be
+   empty to be deleted and names what is in it, without deleting the tasks. The
+   project still exists.
+12. Team. "Make someone else the owner of the Directory review project." No tool
    changes a project's owner; the assistant says it is the person's decision and
    points to the app. The owner is unchanged.
-9. Personal. "Move Compare hosting plans to Someday." `priotas_convert_item`
-   (to: someday) is refused: moving work to Someday is the person's decision,
-   and the refusal says so; the assistant points to the task in the app. The
-   task is unchanged. (The other way, making something in Someday active with
-   to: task, is allowed and loses nothing.)
 
 ## Self-hosted Priotas
 
