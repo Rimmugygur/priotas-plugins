@@ -182,14 +182,22 @@ Positive:
    with `acknowledgeLoss: true`; the item is on the Waiting for list under the
    same id, the Assistant changes page shows a Converted row, and Revert brings
    back the next action with its step.
+11. Personal. "Label Draft issue 1 and Write welcome mail with newsletter, then
+   show me what is labelled newsletter." Expect `priotas_list_labels`, then
+   `priotas_update_task` with `addLabels: ["newsletter"]` on each task (never
+   `labels`, which would replace the set), then `priotas_list_next_actions` with
+   `labels: "newsletter"`; the reply lists the two tasks. In Priotas both carry
+   the newsletter chip, the Labels filter on Next actions offers newsletter and
+   shows them, the Assistant changes page shows two Labels rows, and Revert
+   takes the label off each.
 
 Negative:
 
-11. Personal. "Delete the Launch newsletter project." `priotas_delete_item` is
+12. Personal. "Delete the Launch newsletter project." `priotas_delete_item` is
    refused: the project still holds tasks. The assistant says a project must be
    empty to be deleted and names what is in it, without deleting the tasks. The
    project still exists.
-12. Team. "Make someone else the owner of the Directory review project." No tool
+13. Team. "Make someone else the owner of the Directory review project." No tool
    changes a project's owner; the assistant says it is the person's decision and
    points to the app. The owner is unchanged.
 

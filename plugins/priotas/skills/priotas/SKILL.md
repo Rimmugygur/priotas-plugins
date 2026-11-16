@@ -30,11 +30,43 @@ directly on the area. Next actions hide blocked tasks, so ask again with
 user's own tasks there and `priotas_list_tasks` is everyone's. When the user
 names an area for new work, file it there with `areaId`.
 
-A task and a project each carry one label (`labels` is a list of at most
-one plain word); sending a second is refused, so to relabel, send the new
-one alone. A task takes a label where it is filed in a project or directly
-on an area (`projectId` or `areaId` when you create it), from that
-project's or that area's vocabulary; a task filed nowhere takes none.
+A task and a project are each in one lane or none: `lane`, one plain word
+(up to 30 characters, stored lowercase). A task's lane is one of its
+project's lanes, the columns of the project's board; a task filed directly
+on an area takes a word its area's task board groups by, and a task filed
+nowhere is in none. A project's own `lane` is its place on its area's
+Projects board. `lane` works on `priotas_create_task`, `priotas_update_task`,
+`priotas_clarify_inbox_item`, `priotas_update_item` (an idea in Someday, a
+capture's draft), `priotas_create_project` and `priotas_update_project`.
+Setting another lane replaces the current one, and `lane: ""` on an update
+takes the item out of its lane. `priotas_list_tasks` and
+`priotas_list_next_actions` filter by `lane`: one, or several
+comma-separated.
+
+Labels say what a task or a project is about: many per item (at most 10),
+plain words under the lane's rule, the workspace's own vocabulary. Read it
+with `priotas_list_labels` (each label with how many tasks and projects carry
+it; a team's with its `workspaceId`) and reuse those words before making a new
+one. `labels` on `priotas_create_task`, `priotas_create_project` and
+`priotas_clarify_inbox_item` is the whole set. On `priotas_update_task`,
+`priotas_update_item` (an idea in Someday, a capture) and
+`priotas_update_project`, `labels` replaces the whole set (`[]` clears it),
+while `addLabels` and `removeLabels` change only the words they name: use
+those to tag or untag an item without touching its other labels, and never
+send them with `labels`. An item over 10 labels is refused whole.
+`priotas_list_tasks`, `priotas_list_next_actions`, `priotas_list_projects` and
+`priotas_list_inbox` filter by `labels` (comma-separated, any of them). A label
+is not a lane (the one column of a board an item sits in) and not a context
+(the user's own, where or with what the work is done). In a team the user did
+not allow, the user's own rows still take label changes.
+
+Renaming or deleting a label changes every task and project in the workspace
+that carries it, including items some members cannot see: `priotas_rename_label`
+(`from`, `to`) and `priotas_delete_label` (`label`). Use them only when the user
+asks for exactly that, and never delete a label because it looks unused. In a
+team they need the team allowed and the user its owner or an admin. Renaming
+onto a label already in use would merge the two and is refused: tell the user
+to do that in Priotas, under Workspace settings, Labels.
 
 Personal lists include team tasks assigned to the user. Preserve each returned
 `workspaceId` when acting on those rows. On a personal connection
@@ -58,7 +90,7 @@ on the user's own rows these are refused too: a change of assignee, a
 move to another project or area, a change of blockers (`blockedBy`,
 `blocks`), a move to Someday, reopening a finished task, completing a
 project, marking work reviewed, following, pinning, making a task a step,
-board columns, editing a comment and deleting. A call that asks for one of
+a project's lanes, editing a comment and deleting. A call that asks for one of
 those with other fields is refused whole, so send the other fields on their
 own. When a call says
 this assistant isn't allowed to work in a team, do not retry it and do not look
@@ -151,21 +183,41 @@ notes and descriptions; preserve attachment references when editing bodies.
 A step is a task inside another task. `parentTaskId` on `priotas_update_task`
 makes an existing task the last step of that task, and an empty string takes
 a step out again. A step is where its task is, so joining takes the task's
-project, area and place (which can drop its label) and `parentTaskId` is not
-combined with `projectId`, `areaId` or `status`. `afterId` or `beforeId`
-places a step among its sibling steps, and any other task in the manual order
-of its list. Steps are worked in order: a later step waits for the ones before
-it. A task cannot be made a step of a capture, since that would move it back
-to the inbox: clarify the capture first.
+project, area and place (which can take it out of its lane) and
+`parentTaskId` is not combined with `projectId`, `areaId` or `status`.
+`afterId` or `beforeId` places a step among its sibling steps, and any other
+task in the manual order of its list. Steps are worked in order: a later step
+waits for the ones before it. A task cannot be made a step of a capture,
+since that would move it back to the inbox: clarify the capture first.
 
-A project's board columns are the labels its tasks carry. `columns` on
-`priotas_update_project` replaces the whole list, in order, each with an
-optional `limitCount`: read the current list first (`priotas_get_item` on the
-project, `columns`) and send it back with your change. A column you leave out
-is dropped from the board and its tasks keep the label. `renameColumn`
-(`from`, `to`) renames one column and every task that carries it. Renaming
-onto a name that already exists would merge two columns and is refused: tell
-the user to do that in Priotas.
+Every project keeps its own lanes, in order, each with an optional limit:
+they are its board's columns. Typing a lane on a task adds it to the
+project's list, and a lane stays when its last task leaves it.
+`priotas_get_item` on a project lists its Lanes with how many tasks each
+holds and its limit. `lanes` on `priotas_update_project` replaces the whole
+list, in order, each `{lane, limitCount}` (`limitCount` optional): read the
+current list first and send it back with your change. A lane write never
+drops a lane that tasks are in: one you leave out that still has tasks is
+kept after the ones you listed, and the result says which lanes it kept
+because they have tasks; an empty lane you leave out is dropped. Removing a
+lane that tasks are in is the user's, in Priotas, where they choose where its
+tasks go. `renameLane` (`{from, to}`) renames one lane, and every task in it
+goes with it. Renaming onto a lane that already exists would merge two lanes
+and is refused: tell the user to do that in Priotas. `lanes` and
+`renameLane` do not go in the same call: rename first, then reorder.
+
+An area keeps its own lanes the same way: the columns of its Projects board,
+which its projects sit in. A project given a lane while it is in an area, or
+moved into one with its lane, adds the lane to the area's list, and a lane
+stays when its last project leaves it. `priotas_get_item` on an area lists its
+Lanes with how many projects each holds and its limit. `lanes` and
+`renameLane` on `priotas_update_area` work as on a project, with projects in
+place of tasks: send the whole list in order (read it first), a lane with
+projects in it is never dropped by the list, a rename takes every project in
+the lane along, a rename onto an existing lane is refused, and removing a
+lane with projects in it is the user's, in Priotas. In a team the user did not
+allow, an area's lanes are refused: an area is never one of the user's own
+rows.
 
 To bring a finished task back, call `priotas_reopen_task` with `reasonMd`: why
 it comes back, which is posted as a comment for whoever finished it. It keeps
